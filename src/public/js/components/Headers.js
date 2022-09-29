@@ -1,3 +1,11 @@
 export const Headers = {
-    template: `<h1>Header</h1>`
+    template: 
+`
+<div class="header">
+  <div class="logo">
+   <i class="ai-command"></i>
+    <span>MyReb</span>
+  </div>
+</div>
+`
 }
