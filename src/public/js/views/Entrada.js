@@ -30,7 +30,7 @@ export const Entrada = {
        <input tabindex="3" v-model="category" id="category" type="text" placeholder="Digite a categoria.">
        -->
        <select tabindex="3" v-model="category">
-       <option value="" selected>Selecione uma categoria</option>
+       <option value="" selected disabled>Selecione uma categoria</option>
         <option v-for="(item, index) in categories" :key="index" :value="item">{{ item }}</option>
        </select>      
       </label>
