@@ -102,6 +102,23 @@ body {
 }
 
 .home {
-  background: red;
+ display: flex;
+ flex-direction: column;  
 }
 
+.form-controll {
+  background: var(--silver);
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  width: 100%;
+}
+
+input {
+  display: flex;
+  min-width: 100%;
+  width: calc(100vw - 40px);
+  box-shadow: 0 0 3px 0 var(--dark);
+  height: 40px;
+  padding: 0 16px;
+}
