@@ -1,17 +1,19 @@
-export const About = {
+export const Saida = {
   template: 
   `
-  <div>About</div>
+    <div class="saida">
+      Saida
+    </div>
   `,
   mounted() {
 
   },
-  data(){
+  data() {
     return {
 
     }
   },
   methods: {
-    
+
   }
 }

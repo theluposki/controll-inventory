@@ -113,7 +113,7 @@ body {
   width: 100%;
 }
 
-input {
+input, select {
   display: flex;
   min-width: 100%;
   width: calc(100vw - 40px);
@@ -136,4 +136,31 @@ button  {
   align-items: center;
   margin: 5px 0;
   font-weight: 600;
+}
+
+.about .list {
+  list-style: none;
+}
+
+.l-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  box-shadow: 0 0 2px 0 var(--dark);
+  margin: 3px 0;
+  padding: 0 16px;
+}
+
+.l-item > .named {
+  display: flex;
+}
+
+.l-item > .named i {
+  font-size: 10px;
+  color: var(--secondary);
+}
+
+.l-price {
+  color: var(--secondary);
 }
