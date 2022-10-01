@@ -1,16 +1,17 @@
 import db from "../db.js"
 
-export const About = {
+export const Products = {
     template: 
 `
-<div class="about">
+<div class="products">
   <ul class="list">
     <li v-for="(item, index) in list" class="l-item" :key="index">
       <div class="named">
         <i>#{{item.id}}</i>&nbsp;
-        <h4>{{ item.name }}</h4>
+        <h4>{{ item.name }}</h4>&nbsp;
+        <span v-if="item.qtd">{{ item.qtd }}x</span>
       </div>
-       <span class="l-price">{{ formatCurrency(item.preco) }}</span>
+      <span class="l-price">{{ formatCurrency(item.preco) }}</span>
     </li>
   </ul>
 </div>

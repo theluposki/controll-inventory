@@ -15,9 +15,9 @@ export const Navigation = {
    <i class="ai-arrow-down"></i>
    Entrada
    </router-link>
-   <router-link to="/about" class="nav-link" exact-active-class="active" exact>
-     <i class="ai-info"></i>
-     About
+   <router-link to="/products" class="nav-link" exact-active-class="active" exact>
+   <i class="ai-grid"></i>
+     Produtos
    </router-link>
 </div>
 `

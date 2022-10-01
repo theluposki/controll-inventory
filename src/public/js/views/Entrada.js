@@ -21,22 +21,26 @@ export const Entrada = {
        *Preço
        <input tabindex="2" v-model.number="preco"  id="preco" type="number" placeholder="Digite o preço.">
       </label>
-    </div> 
+    </div>
+    
+    <div class="form-controll">
+      <label for="qtd">
+       *Quantidade
+       <input tabindex="3" v-model.number="qtd"  id="qtd" type="number" placeholder="Digite a quantidade.">
+      </label>
+    </div>
 
    <div class="form-controll">
       <label for="category">
        *Categoria
-       <!--
-       <input tabindex="3" v-model="category" id="category" type="text" placeholder="Digite a categoria.">
-       -->
-       <select tabindex="3" v-model="category">
+       <select tabindex="4" v-model="category">
        <option value="" selected disabled>Selecione uma categoria</option>
         <option v-for="(item, index) in categories" :key="index" :value="item">{{ item }}</option>
        </select>      
       </label>
     </div> 
 
-    <button @click.prevent="save()">Salvar</button>
+    <button tabindex="5" @keydown.prevent="save()" @click.prevent="save()">Salvar</button>
   </form>
 
 </div>
@@ -52,6 +56,7 @@ data() {
  },
 async mounted() {
   const products = await db.products.toArray()
+  console.log(products)
   //alert(JSON.stringify(products, null, 2))
 },
 methods: {
@@ -59,18 +64,20 @@ methods: {
     this.name = null
     this.preco = null
     this.category = null
+    this.qtd = null
   },
   async save() {
-     if(this.name !== null && this.preco !== null && this.category !== "") {
+     if(this.name !== null && this.preco !== null && this.qtd && this.category !== "") {
        const product = await db.products.add({
          name: this.name,
          preco: this.preco,
+         qtd: this.qtd,
          category: this.category
      })
       
      alert(product)
      this.clear()
-     this.$router.push("/about")
+     this.$router.push("/products")
      } else {
       alert("Insira os dados corretamente!...")
      }
