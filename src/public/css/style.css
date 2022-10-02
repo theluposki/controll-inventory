@@ -113,9 +113,13 @@ body {
   width: 100%;
 }
 
+.form-controll .group {
+  position: relative;
+  display: flex;
+}
+
 input, select {
   display: flex;
-  min-width: 100%;
   width: calc(100vw - 40px);
   box-shadow: 0 0 3px 0 var(--dark);
   height: 40px;
@@ -126,19 +130,45 @@ input, select {
 
 button  {
   display: flex;
-  min-width: 70px;
+  align-items: center;
+
+  width: 70px;
   box-shadow: 0 0 3px 0 var(--dark);
   height: 40px;
   padding: 8px 16px;
   background: var(--royalblue);
   color: var(--white);
   border-radius: var(--basic-radius);
-  align-items: center;
   margin: 5px 0;
   font-weight: 600;
+  cursor: pointer;
 }
 
-.about .list {
+.group button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 0;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+.group-opt {
+  display: flex;
+  align-items: center;
+}
+
+.group-opt button {
+  background-color: transparent;
+  color: var(--dark);
+  padding: 0;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+.list {
   list-style: none;
 }
 

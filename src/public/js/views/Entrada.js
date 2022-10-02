@@ -49,15 +49,13 @@ data() {
   return {
    name: null,
    preco: null,
+   qtd: 1,
    category: "",
-
    categories: ["Mercado", "Bar"]
   }
  },
 async mounted() {
-  const products = await db.products.toArray()
-  console.log(products)
-  //alert(JSON.stringify(products, null, 2))
+
 },
 methods: {
   clear() {
