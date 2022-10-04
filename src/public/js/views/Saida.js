@@ -61,8 +61,7 @@ export const Saida = {
   </div>
   `,
   async mounted() {
-    const products = await db.products.toArray();
-    this.products = products;
+    this.getAllProducts()
   },
   data() {
     return {
@@ -94,25 +93,22 @@ export const Saida = {
         currency: "BRL",
       }).format(number);
     },
+    async getAllProducts() {
+      const products = await db.products.toArray();
+      this.products = products;
+    },
     async addCart(id) {
       const prod = await db.products.get(id);
 
-      if (prod.qtd > 0) {
-        this.cart.push(prod);
-
+      if (prod.qtd != 0) {
+        await db.carts.add(prod);
         prod.qtd = prod.qtd - 1;
         await db.products.put(prod, id);
-        const veriProd = await db.products.get(id);
-
-        if (veriProd.qtd === 0) {
-          await db.products.delete(id);
-          const products = await db.products.toArray();
-          this.products = products;
-          return;
-        }
-
-        const products = await db.products.toArray();
-        return (this.products = products);
+        this.getAllProducts()
+        return;
+      } else {
+        await db.products.delete(id);
+        this.getAllProducts()
       }
 
       console.log(prod);
