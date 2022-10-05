@@ -162,10 +162,20 @@ button  {
 .group-opt button {
   background-color: transparent;
   color: var(--dark);
+  box-shadow: 0 0 0 0 transparent;
   padding: 0;
   justify-content: center;
   width: 35px;
   height: 35px;
+}
+
+.group-opt button:hover {
+  transition: all ease .4s;
+  border: solid 1px var(--dark);
+}
+
+.group-opt button:active {
+  box-shadow: inset 0 0 13px 0 var(--dark);
 }
 
 .list {

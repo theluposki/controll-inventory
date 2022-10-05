@@ -5,7 +5,12 @@ export const Saida = {
   <div class="saida">
     <h3>Saída</h3>
     <hr>
-  
+
+    <div class="resume">
+      <router-link to="/cart">ir para Carrinho</router-link>
+      <h1>{{ getTotal() }}</h1>
+    </div>
+
     <form autocomplete="off">
   
       <div class="form-controll">
@@ -63,7 +68,6 @@ export const Saida = {
   async mounted() {
     this.getAllProducts();
     this.getAllCarts();
-    this.lestCarts()
   },
   data() {
     return {
@@ -73,8 +77,10 @@ export const Saida = {
     };
   },
   methods: {
-    async lestCarts(){
-      
+    getTotal() {
+      const result = this.cart.reduce((a, b) => a + b.preco * b.qtd, 0);
+
+      return this.formatCurrency(result);
     },
     async search() {
       const products = await db.products.toArray();
@@ -103,23 +109,25 @@ export const Saida = {
       this.products = products;
     },
     async getAllCarts() {
-      const carts = await db.carts.toArray()
-      
-      const lastItem = carts.length -1
-      
-      if(carts.length >= 3) {
-        const nArray = [carts[lastItem -2], carts[lastItem -1], carts[lastItem]]
-        
-        this.cart = nArray
-        
-        console.log(nArray)
+      const carts = await db.carts.toArray();
+
+      const lastItem = carts.length - 1;
+
+      if (carts.length >= 3) {
+        const nArray = [
+          carts[lastItem - 2],
+          carts[lastItem - 1],
+          carts[lastItem],
+        ];
+
+        this.cart = nArray;
       } else {
-        const carts = await db.carts.toArray()
-        this.cart = carts
+        const carts = await db.carts.toArray();
+        this.cart = carts;
       }
     },
-    sumPriceItem(qtd,preco) {
-      return (qtd * preco)
+    sumPriceItem(qtd, preco) {
+      return qtd * preco;
     },
     async addCart(id) {
       const prod = await db.products.get(id);
@@ -138,7 +146,7 @@ export const Saida = {
             await db.products.delete(id);
             this.getAllCarts();
             this.getAllProducts();
-            return
+            return;
           }
 
           this.getAllCarts();
@@ -162,16 +170,14 @@ export const Saida = {
         await db.products.delete(id);
         this.getAllProducts();
       }
-
-      console.log(prod);
     },
     async removeCart(id) {
       const prod = await db.products.get(id);
 
       const prodCart = await db.carts.get({ name: prod.name });
-      
-      if(prodCart === undefined) return 
-      
+
+      if (prodCart === undefined) return;
+
       if (prodCart.qtd != 0) {
         prodCart.qtd = prodCart.qtd - 1;
         await db.carts.put(prodCart, prodCart.id);
@@ -185,7 +191,7 @@ export const Saida = {
           await db.carts.delete(prodCart.id);
           this.getAllCarts();
           this.getAllProducts();
-          return
+          return;
         }
 
         this.getAllCarts();
