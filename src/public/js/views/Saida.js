@@ -63,6 +63,7 @@ export const Saida = {
   async mounted() {
     this.getAllProducts();
     this.getAllCarts();
+    this.lestCarts()
   },
   data() {
     return {
@@ -72,6 +73,9 @@ export const Saida = {
     };
   },
   methods: {
+    async lestCarts(){
+      
+    },
     async search() {
       const products = await db.products.toArray();
 
@@ -99,8 +103,20 @@ export const Saida = {
       this.products = products;
     },
     async getAllCarts() {
-      const cart = await db.carts.toArray();
-      this.cart = cart;
+      const carts = await db.carts.toArray()
+      
+      const lastItem = carts.length -1
+      
+      if(carts.length >= 3) {
+        const nArray = [carts[lastItem -2], carts[lastItem -1], carts[lastItem]]
+        
+        this.cart = nArray
+        
+        console.log(nArray)
+      } else {
+        const carts = await db.carts.toArray()
+        this.cart = carts
+      }
     },
     sumPriceItem(qtd,preco) {
       return (qtd * preco)
@@ -151,8 +167,11 @@ export const Saida = {
     },
     async removeCart(id) {
       const prod = await db.products.get(id);
-      const prodCart = await db.carts.get({ name: prod.name });
 
+      const prodCart = await db.carts.get({ name: prod.name });
+      
+      if(prodCart === undefined) return 
+      
       if (prodCart.qtd != 0) {
         prodCart.qtd = prodCart.qtd - 1;
         await db.carts.put(prodCart, prodCart.id);
@@ -174,6 +193,7 @@ export const Saida = {
       } else {
         await db.carts.delete(prodCart.id);
         this.getAllProducts();
+        this.getAllCarts();
       }
     },
     save() {
