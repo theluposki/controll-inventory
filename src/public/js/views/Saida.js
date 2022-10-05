@@ -30,7 +30,7 @@ export const Saida = {
             <h4>{{ item.name }}</h4>&nbsp;
             <span v-if="item.qtd">{{ item.qtd }}x</span>
           </div>
-          <span class="l-price">{{ formatCurrency(item.preco) }}</span>
+          <span class="l-price">{{ formatCurrency(sumPriceItem(item.qtd, item.preco)) }}</span>
         </li>
       </ul>
 
@@ -61,7 +61,8 @@ export const Saida = {
   </div>
   `,
   async mounted() {
-    this.getAllProducts()
+    this.getAllProducts();
+    this.getAllCarts();
   },
   data() {
     return {
@@ -97,24 +98,83 @@ export const Saida = {
       const products = await db.products.toArray();
       this.products = products;
     },
+    async getAllCarts() {
+      const cart = await db.carts.toArray();
+      this.cart = cart;
+    },
+    sumPriceItem(qtd,preco) {
+      return (qtd * preco)
+    },
     async addCart(id) {
       const prod = await db.products.get(id);
+      const prodCart = await db.carts.get({ name: prod.name });
 
       if (prod.qtd != 0) {
-        await db.carts.add(prod);
-        prod.qtd = prod.qtd - 1;
-        await db.products.put(prod, id);
-        this.getAllProducts()
-        return;
+        if (prodCart) {
+          prodCart.qtd = prodCart.qtd + 1;
+          await db.carts.put(prodCart, prodCart.id);
+          prod.qtd = prod.qtd - 1;
+          await db.products.put(prod, id);
+
+          const verifyProd = await db.products.get(id);
+
+          if (verifyProd.qtd === 0) {
+            await db.products.delete(id);
+            this.getAllCarts();
+            this.getAllProducts();
+            return
+          }
+
+          this.getAllCarts();
+          this.getAllProducts();
+        } else {
+          prod.qtd = prod.qtd - 1;
+          await db.products.put(prod, id);
+
+          await db.carts.add({
+            name: prod.name,
+            preco: prod.preco,
+            qtd: 1,
+            category: prod.category,
+          });
+
+          this.getAllProducts();
+          this.getAllCarts();
+          return;
+        }
       } else {
         await db.products.delete(id);
-        this.getAllProducts()
+        this.getAllProducts();
       }
 
       console.log(prod);
     },
-    removeCart(id) {
-      console.log("Remove", id);
+    async removeCart(id) {
+      const prod = await db.products.get(id);
+      const prodCart = await db.carts.get({ name: prod.name });
+
+      if (prodCart.qtd != 0) {
+        prodCart.qtd = prodCart.qtd - 1;
+        await db.carts.put(prodCart, prodCart.id);
+
+        prod.qtd = prod.qtd + 1;
+        await db.products.put(prod, id);
+
+        const verifyProd = await db.carts.get(prodCart.id);
+
+        if (verifyProd.qtd === 0) {
+          await db.carts.delete(prodCart.id);
+          this.getAllCarts();
+          this.getAllProducts();
+          return
+        }
+
+        this.getAllCarts();
+        this.getAllProducts();
+      } else {
+        await db.carts.delete(prodCart.id);
+        this.getAllProducts();
+      }
     },
     save() {
       console.log("salvou...");
