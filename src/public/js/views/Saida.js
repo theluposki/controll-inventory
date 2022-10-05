@@ -36,6 +36,11 @@ export const Saida = {
             <span v-if="item.qtd">{{ item.qtd }}x</span>
           </div>
           <span class="l-price">{{ formatCurrency(sumPriceItem(item.qtd, item.preco)) }}</span>
+          <div class="group-opt">
+          <button @click.prevent="removeCart(item.id)">
+            <i class="ai-minus"></i>
+          </button>
+        </div>
         </li>
       </ul>
 
